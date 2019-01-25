@@ -67,6 +67,7 @@ pickStartingColors randomGenerator colors n
         (randX, newRandGen) = randomR (0, maxX) randomGenerator
         (randY, newRandGen') = randomR (0, maxY) newRandGen
         (randZ, newRandGen'') = randomR (0, maxZ) newRandGen'
+        
         (nearestColor, newColors) = getClosestColor (V3 randX randY randZ) colors
         
         (listColors, finalColorTree) =  pickStartingColors newRandGen'' newColors (n-1)

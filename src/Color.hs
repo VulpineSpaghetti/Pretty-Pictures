@@ -42,7 +42,8 @@ instance (Integral n) => Integral (V3 n) where
 
 toDoublePixel :: Color -> Color -> Pixel RGB Double
 toDoublePixel max color = PixelRGB r' g' b'
-    where (V3 r' g' b') = fmap fromIntegral color / fmap fromIntegral max
+    where
+        (V3 r' g' b') = fmap fromIntegral color / fmap fromIntegral max
 
 
 colorDist :: (Integral n) => V3 n -> V3 n -> Int
