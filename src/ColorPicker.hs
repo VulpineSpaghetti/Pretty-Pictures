@@ -33,5 +33,6 @@ pickClosestFold targetColor colors
 
 
 pickClosestCT :: ColorPicker' ColorTree Color
+{-# INLINE pickClosestCT #-}
 pickClosestCT
     = ColorTree.getClosestColor
