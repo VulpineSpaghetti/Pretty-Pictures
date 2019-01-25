@@ -129,6 +129,11 @@ getSurroundingColors bounds pixels (x,y)
         maybeColors = fmap (pixels !) surroundingIndices
 
 
+isInsidePicture
+    :: ((Int,Int) , (Int,Int))
+    -> (Int,Int)
+    -> Bool
+
 isInsidePicture ((lx,ly), (ux,uy)) (_x,_y)
     =  _x >= lx
     && _x <= ux
