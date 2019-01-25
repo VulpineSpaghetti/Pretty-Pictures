@@ -1,0 +1,9 @@
+# Created by stack
+.stack-work/
+
+# Created pictures
+Art/
+Art archive/
+
+# Output from profiler
+*.prof
