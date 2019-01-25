@@ -6,6 +6,7 @@ import ColorCombinator
 import ColorPicker
 import Color
 import ColorTree
+import Pixels
 
 import Data.Ix
 import Data.Bifunctor
@@ -13,7 +14,6 @@ import Data.List
 
 import Linear.V3
 import System.Random
-import Data.Array
 import Graphics.Image hiding (Array, maximum)
 
 
@@ -48,7 +48,7 @@ makeArtAndSave fileName bounds startingPos indexPath colorPicker colorCombinator
         maxBlue = maximum . fmap getBlue $ art
         max = V3 maxRed maxGreen maxBlue
         
-        image = makeImage bounds (toDoublePixel max . (art !)) :: Image VS RGB Double
+        image = makeImage bounds (toDoublePixel max . maybe 0 id . (art !)) :: Image VS RGB Double
 
     writeImageExact PNG [] ("art/" ++ fileName ++ ".png") image
 
@@ -64,10 +64,10 @@ makeArt
     -> IndexPath [] (Int, Int)
     -> ColorPicker' ColorTree Color
     -> ColorCombinator [] Color
-    -> Array (Int, Int) Color
+    -> Pixels
 
 makeArt (x,y) randomGenerator startingPos indexPath colorPicker colorCombinator
-    = filledInPicture
+    = makePicture bounds orderedIndices colors pixels colorPicker colorCombinator
     where
         bounds = ((0,0) , (x-1,y-1))
 
@@ -79,22 +79,19 @@ makeArt (x,y) randomGenerator startingPos indexPath colorPicker colorCombinator
         allColors = makeAllColors (x,y)
         (startingColors, colors) = pickStartingColors randomGenerator allColors (length startingLocations)
 
-        startingPixels = zip startingLocations . fmap (Just) $ startingColors
+        startingPixels = zip startingLocations startingColors
 
-        pixels = array bounds $ [ (xy, Nothing) | xy <- (indices \\ startingLocations) ] ++ startingPixels
-
-        picture = makePicture bounds orderedIndices colors pixels colorPicker colorCombinator
-        filledInPicture = fmap (maybe 200 id) picture
+        pixels = addColoredPixels startingPixels emptyScreen
 
 
 makePicture
     :: ((Int,Int) , (Int,Int))
     -> [(Int, Int)]
     -> ColorTree
-    -> Array (Int, Int) (Maybe Color)
+    -> Pixels
     -> ColorPicker' ColorTree Color
     -> ColorCombinator [] Color
-    -> Array (Int, Int) (Maybe Color)
+    -> Pixels
 
 makePicture _ [] _ pixels _ _
     = pixels
@@ -110,12 +107,12 @@ makePicture bounds (index:indices) colors pixels colorPicker colorCombinator
 
         (pickedColor, updatedColors) = colorPicker combinedSurrColors colors
 
-        updatedPixels = pixels // [(index , Just pickedColor)]
+        updatedPixels = addColoredPixel index pickedColor pixels
 
 
 getSurroundingColors
     :: ((Int,Int) , (Int,Int))
-    -> Array (Int,Int) (Maybe Color)
+    -> Pixels
     -> (Int,Int)
     -> [Color]
 
