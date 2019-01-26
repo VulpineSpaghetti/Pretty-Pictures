@@ -27,5 +27,10 @@ addPixels ((location, color) : list) picture
     
     
 (!) :: Picture -> (Int,Int) -> Maybe Color
-picture ! pixel = lookup pixel picture
+picture ! pixel
+    = lookup pixel picture
 
+
+(!?) :: Picture -> (Int,Int) -> Color
+picture !? pixel
+    = maybe 0 id (picture Picture.! pixel)

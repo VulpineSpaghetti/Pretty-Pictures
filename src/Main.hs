@@ -51,7 +51,7 @@ makeArtAndSave fileName bounds startingPos relativeSeedLocations searchDistance 
         -- Necessary because makeImage seems to take the y coordinate first and x coordinate second
         invertCoords (x,y) = (y,x)
         
-        image = makeImage (invertCoords bounds) (toDoublePixel max . maybe 0 id . (art !) . invertCoords) :: Image VS RGB Double
+        image = makeImage (invertCoords bounds) (toDoublePixel max . (art !?) . invertCoords) :: Image VS RGB Double
 
     writeImageExact PNG [] ("art/" ++ fileName ++ ".png") image
 
