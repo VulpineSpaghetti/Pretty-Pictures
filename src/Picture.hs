@@ -18,8 +18,8 @@ emptyPicture = empty
 
 
 -- | Colors a pixel in the picture.
-colorPixel :: (Int,Int) -> Color -> Picture -> Picture
-colorPixel = insert
+colorAPixel :: (Int,Int) -> Color -> Picture -> Picture
+colorAPixel = insert
 
 
 -- | Colors pixels in the picture.
@@ -27,7 +27,7 @@ colorPixels :: [((Int,Int), Color)] -> Picture -> Picture
 colorPixels [] picture
     = picture
 colorPixels ((pixel, color) : list) picture
-    = colorPixels list $ colorPixel pixel color picture
+    = colorPixels list $ colorAPixel pixel color picture
 
 
 -- | Returns the color at the target pixel if it's colored yet. Otherwise returns `Nothing`.

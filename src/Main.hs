@@ -89,7 +89,7 @@ makeArt (x,y) randomGenerator pictureOrigin relativeSeedLocations searchDistance
 
         startingPicture = zip absoluteSeedLocations startingColors
 
-        picture = addPixels startingPicture emptyPicture
+        picture = colorPixels startingPicture emptyPicture
 
 
 -- | Actually draws the picture
@@ -117,7 +117,7 @@ makePicture bounds searchDistance (index:indices) colors picture colorPicker col
 
         (pickedColor, updatedColors) = colorPicker combinedSurrColors colors
 
-        updatedPicture = addAPixel index pickedColor picture
+        updatedPicture = colorAPixel index pickedColor picture
 
 
 -- | Returns the colors surrounding the given pixel.
