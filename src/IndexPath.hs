@@ -21,8 +21,8 @@ module IndexPath
 
 import Prelude hiding (Left,Right)
 
-import Data.List
 import Data.Bifunctor
+import Data.List
 
 
 -- | `IndexPath` is a function that gets the starting index and a container with indices

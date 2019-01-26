@@ -7,8 +7,8 @@ import Color
 
 import Data.Ix
 
-import Linear.V3
 import Data.Trees.KdTree
+import Linear.V3
 import System.Random
 
 

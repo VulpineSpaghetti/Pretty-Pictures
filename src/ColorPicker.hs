@@ -3,10 +3,6 @@ module ColorPicker where
 import Color
 import ColorPalette
 
-import Data.List
-
-import Linear.V3
-
 
 -- | `ColorPicker` is a function that takes a chosen color and a container of available colors
 -- and returns a color that is closest to that color along with a new container

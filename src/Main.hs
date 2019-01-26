@@ -1,20 +1,20 @@
 module Main (main) where
 
-import PictureOrigin
-import IndexPath
-import ColorCombinator
-import ColorPicker
 import Color
+import ColorCombinator
 import ColorPalette
+import ColorPicker
+import IndexPath
 import Picture
+import PictureOrigin
 
-import Data.Ix
 import Data.Bifunctor
+import Data.Ix
 import Data.List
 
+import Graphics.Image hiding (maximum)
 import Linear.V3
 import System.Random
-import Graphics.Image hiding (Array, maximum)
 
 
 main :: IO ()

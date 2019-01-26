@@ -2,8 +2,8 @@ module Color where
 
 import Data.Ratio
 
+import Graphics.Image
 import Linear.V3
-import Graphics.Image hiding (Array,maximum)
 
 
 -- | `Color` defines the color of a pixel
