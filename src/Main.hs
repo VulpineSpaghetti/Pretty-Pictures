@@ -20,10 +20,9 @@ import Graphics.Image hiding (Array, maximum)
 -- TODO: Make starting locations configurable as an argument of makeArtAndSave
 main :: IO ()
 main = do
-    let -- bounds = (160, 200)
-        -- bounds = (200, 300)
-        bounds = (400, 600)
-        -- bounds = (1080, 1920)
+    let bounds = (600, 400)
+        -- bounds = (1280, 720)
+        -- bounds = (1920, 1080)
     
     makeArtAndSave "Test Rounded Square" bounds TheMiddle roundedSquarePath pickClosestCT maxColor
 
@@ -48,7 +47,10 @@ makeArtAndSave fileName bounds startingPos indexPath colorPicker colorCombinator
         maxBlue = maximum . fmap getBlue $ art
         max = V3 maxRed maxGreen maxBlue
         
-        image = makeImage bounds (toDoublePixel max . maybe 0 id . (art !)) :: Image VS RGB Double
+        -- Necessary because makeImage seems to take the y coordinate first and x coordinate second
+        invertCoords (x,y) = (y,x)
+        
+        image = makeImage (invertCoords bounds) (toDoublePixel max . maybe 0 id . (art !) . invertCoords) :: Image VS RGB Double
 
     writeImageExact PNG [] ("art/" ++ fileName ++ ".png") image
 
