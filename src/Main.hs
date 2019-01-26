@@ -1,6 +1,6 @@
 module Main (main) where
 
-import StartingPosition
+import PictureOrigin
 import IndexPath
 import ColorCombinator
 import ColorPicker
@@ -29,7 +29,7 @@ main = do
 makeArtAndSave
     :: String
     -> (Int, Int)
-    -> StartingPos
+    -> PictureOrigin
     -> [(Int, Int)]
     -> Int
     -> IndexPath [] (Int, Int)
@@ -37,11 +37,11 @@ makeArtAndSave
     -> ColorCombinator [] Color
     -> IO ()
 
-makeArtAndSave fileName bounds startingPos relativeSeedLocations searchDistance indexPath colorPicker colorCombinator
+makeArtAndSave fileName bounds pictureOrigin relativeSeedLocations searchDistance indexPath colorPicker colorCombinator
     = do
     randomGenerator <- getStdGen
 
-    let art = makeArt bounds randomGenerator startingPos relativeSeedLocations searchDistance indexPath colorPicker colorCombinator
+    let art = makeArt bounds randomGenerator pictureOrigin relativeSeedLocations searchDistance indexPath colorPicker colorCombinator
         
         maxRed = maximum . fmap getRed $ art
         maxGreen = maximum . fmap getGreen $ art
@@ -63,7 +63,7 @@ makeArt
     :: RandomGen gen
     => (Int, Int)
     -> gen
-    -> StartingPos
+    -> PictureOrigin
     -> [(Int, Int)]
     -> Int
     -> IndexPath [] (Int, Int)
@@ -71,13 +71,13 @@ makeArt
     -> ColorCombinator [] Color
     -> Picture
 
-makeArt (x,y) randomGenerator startingPos relativeSeedLocations searchDistance indexPath colorPicker colorCombinator
+makeArt (x,y) randomGenerator pictureOrigin relativeSeedLocations searchDistance indexPath colorPicker colorCombinator
     = makePicture bounds searchDistance orderedIndices colors picture colorPicker colorCombinator
     where
         bounds = ((0,0) , (x-1,y-1))
 
         indices = range bounds
-        origin@(ox,oy) = getRelativePos startingPos (x,y)
+        origin@(ox,oy) = getAbsolutePos pictureOrigin (x,y)
         absoluteSeedLocations = fmap (bimap (+ox) (+oy)) relativeSeedLocations
         orderedIndices = indexPath origin indices \\ absoluteSeedLocations
 
