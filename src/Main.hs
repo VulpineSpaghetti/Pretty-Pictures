@@ -23,7 +23,7 @@ main = do
         -- bounds = (1280, 720)
         -- bounds = (1920, 1080)
     
-    makeArtAndSave "Circle" bounds TheMiddle [(0,0)] circularPath pickClosestCT maxColor
+    makeArtAndSave "Circle" bounds TheMiddle [(0,0)] 2 circularPath pickClosestCT maxColor
 
 
 makeArtAndSave
@@ -31,16 +31,17 @@ makeArtAndSave
     -> (Int, Int)
     -> StartingPos
     -> [(Int, Int)]
+    -> Int
     -> IndexPath [] (Int, Int)
     -> ColorPicker' ColorTree Color
     -> ColorCombinator [] Color
     -> IO ()
 
-makeArtAndSave fileName bounds startingPos relativeSeedLocations indexPath colorPicker colorCombinator
+makeArtAndSave fileName bounds startingPos relativeSeedLocations searchDistance indexPath colorPicker colorCombinator
     = do
     randomGenerator <- getStdGen
 
-    let art = makeArt bounds randomGenerator startingPos relativeSeedLocations indexPath colorPicker colorCombinator
+    let art = makeArt bounds randomGenerator startingPos relativeSeedLocations searchDistance indexPath colorPicker colorCombinator
         
         maxRed = maximum . fmap getRed $ art
         maxGreen = maximum . fmap getGreen $ art
@@ -64,13 +65,14 @@ makeArt
     -> gen
     -> StartingPos
     -> [(Int, Int)]
+    -> Int
     -> IndexPath [] (Int, Int)
     -> ColorPicker' ColorTree Color
     -> ColorCombinator [] Color
     -> Pixels
 
-makeArt (x,y) randomGenerator startingPos relativeSeedLocations indexPath colorPicker colorCombinator
-    = makePicture bounds orderedIndices colors pixels colorPicker colorCombinator
+makeArt (x,y) randomGenerator startingPos relativeSeedLocations searchDistance indexPath colorPicker colorCombinator
+    = makePicture bounds searchDistance orderedIndices colors pixels colorPicker colorCombinator
     where
         bounds = ((0,0) , (x-1,y-1))
 
@@ -90,21 +92,22 @@ makeArt (x,y) randomGenerator startingPos relativeSeedLocations indexPath colorP
 makePicture
     :: ((Int,Int) , (Int,Int))
     -> [(Int, Int)]
+    -> Int
     -> ColorTree
     -> Pixels
     -> ColorPicker' ColorTree Color
     -> ColorCombinator [] Color
     -> Pixels
 
-makePicture _ [] _ pixels _ _
+makePicture _ _ [] _ pixels _ _
     = pixels
-makePicture bounds (index:indices) colors pixels colorPicker colorCombinator
+makePicture bounds searchDistance (index:indices) colors pixels colorPicker colorCombinator
     | null colors
         = pixels
     | otherwise
         = makePicture bounds indices updatedColors updatedPixels colorPicker colorCombinator
     where
-        surroundingColors = getSurroundingColors bounds pixels index
+        surroundingColors = getSurroundingColors bounds searchDistance pixels index
 
         combinedSurrColors = colorCombinator surroundingColors
 
@@ -119,10 +122,10 @@ getSurroundingColors
     -> (Int,Int)
     -> [Color]
 
-getSurroundingColors bounds pixels (x,y)
+getSurroundingColors bounds searchDist pixels (x,y)
     = [ color | Just color <- maybeColors ]
     where
-        offsets = range ((-2,-2) , (2,2))
+        offsets = range ((-searchDist,-searchDist) , (searchDist,searchDist))
 
         surroundingIndices = filter (isInsidePicture bounds) . fmap (bimap (+x) (+y)) $ offsets
 
