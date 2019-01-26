@@ -6,7 +6,7 @@ import ColorCombinator
 import ColorPicker
 import Color
 import ColorTree
-import Pixels
+import Picture
 
 import Data.Ix
 import Data.Bifunctor
@@ -69,10 +69,10 @@ makeArt
     -> IndexPath [] (Int, Int)
     -> ColorPicker' ColorTree Color
     -> ColorCombinator [] Color
-    -> Pixels
+    -> Picture
 
 makeArt (x,y) randomGenerator startingPos relativeSeedLocations searchDistance indexPath colorPicker colorCombinator
-    = makePicture bounds searchDistance orderedIndices colors pixels colorPicker colorCombinator
+    = makePicture bounds searchDistance orderedIndices colors picture colorPicker colorCombinator
     where
         bounds = ((0,0) , (x-1,y-1))
 
@@ -84,52 +84,53 @@ makeArt (x,y) randomGenerator startingPos relativeSeedLocations searchDistance i
         allColors = makeAllColors (x,y)
         (startingColors, colors) = pickStartingColors randomGenerator allColors (length absoluteSeedLocations)
 
-        startingPixels = zip absoluteSeedLocations startingColors
+        startingPicture = zip absoluteSeedLocations startingColors
 
-        pixels = addColoredPixels startingPixels emptyScreen
+        picture = addColoredPicture startingPicture emptyScreen
 
 
 makePicture
     :: ((Int,Int) , (Int,Int))
-    -> [(Int, Int)]
     -> Int
+    -> [(Int, Int)]
     -> ColorTree
-    -> Pixels
+    -> Picture
     -> ColorPicker' ColorTree Color
     -> ColorCombinator [] Color
-    -> Pixels
+    -> Picture
 
-makePicture _ _ [] _ pixels _ _
-    = pixels
-makePicture bounds searchDistance (index:indices) colors pixels colorPicker colorCombinator
+makePicture _ _ [] _ picture _ _
+    = picture
+makePicture bounds searchDistance (index:indices) colors picture colorPicker colorCombinator
     | null colors
-        = pixels
+        = picture
     | otherwise
-        = makePicture bounds indices updatedColors updatedPixels colorPicker colorCombinator
+        = makePicture bounds searchDistance indices updatedColors updatedPicture colorPicker colorCombinator
     where
-        surroundingColors = getSurroundingColors bounds searchDistance pixels index
+        surroundingColors = getSurroundingColors bounds searchDistance picture index
 
         combinedSurrColors = colorCombinator surroundingColors
 
         (pickedColor, updatedColors) = colorPicker combinedSurrColors colors
 
-        updatedPixels = addColoredPixel index pickedColor pixels
+        updatedPicture = addColoredPixel index pickedColor picture
 
 
 getSurroundingColors
     :: ((Int,Int) , (Int,Int))
-    -> Pixels
+    -> Int
+    -> Picture
     -> (Int,Int)
     -> [Color]
 
-getSurroundingColors bounds searchDist pixels (x,y)
+getSurroundingColors bounds searchDist picture (x,y)
     = [ color | Just color <- maybeColors ]
     where
         offsets = range ((-searchDist,-searchDist) , (searchDist,searchDist))
 
         surroundingIndices = filter (isInsidePicture bounds) . fmap (bimap (+x) (+y)) $ offsets
 
-        maybeColors = fmap (pixels !) surroundingIndices
+        maybeColors = fmap (picture !) surroundingIndices
 
 
 isInsidePicture
