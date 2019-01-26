@@ -10,7 +10,7 @@ A small program that generates interesting images using a simple reduce/fold.
 First you need GHC and Stack. If you don't have either, then you can download them from [here](https://www.haskell.org/platform/).
 
  * download the project
- * open terminal in the folder of the project (**not** in src/)
+ * open terminal in the folder of the project (**not** in `src/`)
  * run `stack install` to install
  * then run `Pretty-pictures.exe` on Windows or `Pretty-pictures` on Linux.
 
