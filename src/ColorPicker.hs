@@ -1,7 +1,7 @@
 module ColorPicker where
 
 import Color
-import ColorTree
+import ColorPalette
 
 import Data.List
 
@@ -20,27 +20,10 @@ type ColorPicker' t a
     = a -> t -> (a, t)
 
 
--- | Picks the closest color to the provided one using a simple fold.
--- 
--- O(n)
-pickClosestFold :: (Ord n, Integral n) => ColorPicker [] (V3 n)
-{-# INLINE pickClosestFold #-}
-pickClosestFold targetColor colors
-    = (pickedColor, delete pickedColor colors)
-    where
-        pickedColor = foldr1 accumFun colors
-        
-        accumFun newColor oldColor
-            | colorDist targetColor newColor < colorDist targetColor oldColor
-                = newColor
-            | otherwise
-                = oldColor
-
-
--- | Picks the closest color to the provided one using the ColorTree.
+-- | Picks the closest unused color to the provided one using ColorPalette.
 -- 
 -- O(log n)
-pickClosestCT :: ColorPicker' ColorTree Color
-{-# INLINE pickClosestCT #-}
-pickClosestCT
-    = ColorTree.getClosestColor
+pickClosest :: ColorPicker' ColorPalette Color
+{-# INLINE pickClosest #-}
+pickClosest
+    = getClosestColor

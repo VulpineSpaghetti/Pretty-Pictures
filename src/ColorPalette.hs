@@ -1,7 +1,7 @@
 {-# Language  TypeSynonymInstances #-}
 {-# Language  FlexibleInstances #-}
 
-module ColorTree where
+module ColorPalette where
 
 import Color
 
@@ -13,7 +13,7 @@ import System.Random
 
 
 -- | Represents the remaining colors to paint the picture with
-type ColorTree = KdTree Color
+type ColorPalette = KdTree Color
 
 
 -- Necessary typeclass instance so that it can be used in KdTree
@@ -29,7 +29,7 @@ instance Point Color where
 
 
 -- | Removes color from the color palette 
-removeColor :: Color -> ColorTree -> ColorTree
+removeColor :: Color -> ColorPalette -> ColorPalette
 removeColor color colors
     = remove' colors color
 
@@ -48,7 +48,7 @@ remove' (KdNode l p r axis) pKill
 
 
 -- | Returns the closest unused color in the color palette to the given one.
-getClosestColor :: Color -> ColorTree -> (Color, ColorTree)
+getClosestColor :: Color -> ColorPalette -> (Color, ColorPalette)
 getClosestColor color colorTree
     = (closestColor, removeColor closestColor colorTree)
     where
@@ -59,7 +59,7 @@ getClosestColor color colorTree
 -- 
 -- It takes the second argument to be the resolution of the resulting image, from which it
 -- figures out how many pixels will be in the image.
-makeAllColors :: (Int, Int) -> ColorTree
+makeAllColors :: (Int, Int) -> ColorPalette
 makeAllColors (x, y)
     = fromList [ toColor i | i <- range bounds ]
     where
@@ -68,11 +68,11 @@ makeAllColors (x, y)
 
 
 -- | Randomly picks few random colors from the color palette and returns them.
-pickStartingColors :: RandomGen gen => gen -> ColorTree -> Int -> ([Color], ColorTree)
+pickStartingColors :: RandomGen gen => gen -> ColorPalette -> Int -> ([Color], ColorPalette)
 pickStartingColors _ colors 0
     = ([], colors)
 pickStartingColors randomGenerator colors n
-    = (nearestColor : listColors, finalColorTree)
+    = (nearestColor : listColors, finalColorPalette)
     where
         (V3 maxX maxY maxZ) = maximum . toList $ colors
         (randX, newRandGen) = randomR (0, maxX) randomGenerator
@@ -81,4 +81,4 @@ pickStartingColors randomGenerator colors n
         
         (nearestColor, newColors) = getClosestColor (V3 randX randY randZ) colors
         
-        (listColors, finalColorTree) =  pickStartingColors newRandGen'' newColors (n-1)
+        (listColors, finalColorPalette) =  pickStartingColors newRandGen'' newColors (n-1)

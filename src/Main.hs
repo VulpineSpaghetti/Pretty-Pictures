@@ -5,7 +5,7 @@ import IndexPath
 import ColorCombinator
 import ColorPicker
 import Color
-import ColorTree
+import ColorPalette
 import Picture
 
 import Data.Ix
@@ -23,7 +23,7 @@ main = do
         -- bounds = (1280, 720)
         -- bounds = (1920, 1080)
     
-    makeArtAndSave "Circle" bounds TheMiddle [(0,0)] 2 circularPath pickClosestCT maxColor
+    makeArtAndSave "Circle" bounds TheMiddle [(0,0)] 2 circularPath pickClosest maxColor
 
 
 -- | Creates the picture and saves it into a PNG in an art/ folder.
@@ -34,7 +34,7 @@ makeArtAndSave
     -> [(Int, Int)]
     -> Int
     -> IndexPath [] (Int, Int)
-    -> ColorPicker' ColorTree Color
+    -> ColorPicker' ColorPalette Color
     -> ColorCombinator [] Color
     -> IO ()
 
@@ -69,7 +69,7 @@ makeArt
     -> [(Int, Int)]
     -> Int
     -> IndexPath [] (Int, Int)
-    -> ColorPicker' ColorTree Color
+    -> ColorPicker' ColorPalette Color
     -> ColorCombinator [] Color
     -> Picture
 
@@ -96,9 +96,9 @@ makePicture
     :: ((Int,Int) , (Int,Int))
     -> Int
     -> [(Int, Int)]
-    -> ColorTree
+    -> ColorPalette
     -> Picture
-    -> ColorPicker' ColorTree Color
+    -> ColorPicker' ColorPalette Color
     -> ColorCombinator [] Color
     -> Picture
 
