@@ -2,7 +2,7 @@
 -- documentation, see http://haskell.org/cabal/users-guide/
 
 name:                Pretty-Pictures
-version:             0.2.0.0
+version:             0.3.0
 synopsis:            Programatic creation of pretty pictures
 -- description:         
 license:             MIT

@@ -7,7 +7,7 @@ data PictureOrigin
     | TopMiddle
     | TopRight
     | MiddleLeft
-    | TheMiddle
+    | Center
     | MiddleRight
     | BottomLeft
     | BottomMiddle
@@ -18,15 +18,15 @@ data PictureOrigin
 
 -- | Converts the origin into a pair of doubles in the range [0,1] representing its position
 getRelativePos :: PictureOrigin -> (Double, Double)
-getRelativePos TopLeft           = (0  , 1  )
-getRelativePos TopMiddle         = (0.5, 1  )
-getRelativePos TopRight          = (1  , 1  )
+getRelativePos TopLeft           = (0  , 0  )
+getRelativePos TopMiddle         = (0.5, 0  )
+getRelativePos TopRight          = (1  , 0  )
 getRelativePos MiddleLeft        = (0  , 0.5)
-getRelativePos TheMiddle         = (0.5, 0.5)
+getRelativePos Center            = (0.5, 0.5)
 getRelativePos MiddleRight       = (1  , 0.5)
-getRelativePos BottomLeft        = (0  , 0  )
-getRelativePos BottomMiddle      = (0  , 0.5)
-getRelativePos BottomRight       = (0  , 1  )
+getRelativePos BottomLeft        = (0  , 1  )
+getRelativePos BottomMiddle      = (0.5, 1  )
+getRelativePos BottomRight       = (1  , 1  )
 getRelativePos (PictureOrigin x y) = (x  , y  )
 
 

@@ -4,8 +4,12 @@
 
 A small program that generates interesting images using a simple reduce/fold.
 
-It allows you to make pictures such as: ![squary water colors](https://i.imgur.com/wiSVUsk.jpg) or ![circly water colors](https://i.imgur.com/OwLaGsU.jpg)
-
+It allows you to make pictures such as: 
+![squary water colors](https://i.imgur.com/wiSVUsk.jpg) 
+(generated using `makeArtAndSave "Rounded square" (1280, 720) Center [(0,0)] 2 roundedSquarePath pickClosest brightestColor`)
+or 
+![circly water colors](https://i.imgur.com/OwLaGsU.jpg) 
+(generated using `makeArtAndSave "Circle" (1280, 720) BottomLeft [(0,0)] 2 circularPath pickClosest brightestColor`)
 
 ## Installation instructions
 
