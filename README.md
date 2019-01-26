@@ -4,6 +4,8 @@
 
 A small program that generates interesting images using a simple reduce/fold.
 
+It allows you to make pictures such as: ![squary water colors](https://i.imgur.com/wiSVUsk.jpg) or ![circly water colors](https://i.imgur.com/OwLaGsU.jpg)
+
 
 ## Installation instructions
 
