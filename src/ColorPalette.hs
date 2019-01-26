@@ -49,10 +49,10 @@ remove' (KdNode l p r axis) pKill
 
 -- | Returns the closest unused color in the color palette to the given one.
 getClosestColor :: Color -> ColorPalette -> (Color, ColorPalette)
-getClosestColor color colorTree
-    = (closestColor, removeColor closestColor colorTree)
+getClosestColor color colors
+    = (closestColor, removeColor closestColor colors)
     where
-        Just closestColor = nearestNeighbor colorTree color
+        Just closestColor = nearestNeighbor colors color
 
 
 -- | Makes a color palette with all colors, so that there are more colors than pixels.

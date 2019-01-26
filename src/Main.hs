@@ -23,7 +23,7 @@ main = do
         -- bounds = (1280, 720)
         -- bounds = (1920, 1080)
     
-    makeArtAndSave "Circle" bounds TheMiddle [(0,0)] 2 circularPath pickClosest maxColor
+    makeArtAndSave "Circle" bounds TheMiddle [(0,0)] 2 circularPath pickClosest brightestColor
 
 
 -- | Creates the picture and saves it into a PNG in an art/ folder.
@@ -47,12 +47,13 @@ makeArtAndSave fileName bounds pictureOrigin relativeSeedLocations searchDistanc
         maxRed = maximum . fmap getRed $ art
         maxGreen = maximum . fmap getGreen $ art
         maxBlue = maximum . fmap getBlue $ art
-        max = V3 maxRed maxGreen maxBlue
+        maxColor = V3 maxRed maxGreen maxBlue
         
         -- Necessary because makeImage seems to take the y coordinate first and x coordinate second
         invertCoords (x,y) = (y,x)
         
-        image = makeImage (invertCoords bounds) (toDoublePixel max . (art !?) . invertCoords) :: Image VS RGB Double
+        -- Converts the picture into an image from the Graphics.Image library
+        image = makeImage (invertCoords bounds) (toDoublePixel maxColor . (art !?) . invertCoords) :: Image VS RGB Double
 
     writeImageExact PNG [] ("art/" ++ fileName ++ ".png") image
 
@@ -79,8 +80,8 @@ makeArt (x,y) randomGenerator pictureOrigin relativeSeedLocations searchDistance
         bounds = ((0,0) , (x-1,y-1))
 
         indices = range bounds
-        origin@(ox,oy) = getAbsolutePos pictureOrigin (x,y)
-        absoluteSeedLocations = fmap (bimap (+ox) (+oy)) relativeSeedLocations
+        origin@(oX,oY) = getAbsolutePos pictureOrigin (x,y)
+        absoluteSeedLocations = fmap (bimap (+oX) (+oY)) relativeSeedLocations
         orderedIndices = indexPath origin indices \\ absoluteSeedLocations
 
         allColors = makeAllColors (x,y)
@@ -128,7 +129,7 @@ getSurroundingColors
     -> [Color]
 
 getSurroundingColors bounds searchDist picture (x,y)
-    = [ color | Just color <- maybeColors ]
+    = [ color | Just color <- maybeColors ]  -- This removes any `Nothing`s from the maybeColors list and returns colors without `Just`s
     where
         offsets = range ((-searchDist,-searchDist) , (searchDist,searchDist))
 

@@ -43,9 +43,9 @@ instance (Integral n) => Integral (V3 n) where
 -- | Converts a color to a color with brightness relative to the maximal/brightest color
 -- and converts it into a Pixel
 toDoublePixel :: Color -> Color -> Pixel RGB Double
-toDoublePixel max color = PixelRGB r' g' b'
+toDoublePixel maxColor color = PixelRGB r' g' b'
     where
-        (V3 r' g' b') = fmap fromIntegral color / fmap fromIntegral max
+        (V3 r' g' b') = fmap fromIntegral color / fmap fromIntegral maxColor
 
 
 -- | Returns the distance of two colors

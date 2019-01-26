@@ -17,17 +17,17 @@ emptyPicture :: Picture
 emptyPicture = empty
 
 
--- | Colors/Adds a pixel into the picture.
-addAPixel :: (Int,Int) -> Color -> Picture -> Picture
-addAPixel = insert
+-- | Colors a pixel in the picture.
+colorPixel :: (Int,Int) -> Color -> Picture -> Picture
+colorPixel = insert
 
 
--- | Colors/Adds pixels into the picture.
-addPixels :: [((Int,Int), Color)] -> Picture -> Picture
-addPixels [] picture
+-- | Colors pixels in the picture.
+colorPixels :: [((Int,Int), Color)] -> Picture -> Picture
+colorPixels [] picture
     = picture
-addPixels ((location, color) : list) picture
-    = addPixels list $ addAPixel location color picture
+colorPixels ((pixel, color) : list) picture
+    = colorPixels list $ colorPixel pixel color picture
 
 
 -- | Returns the color at the target pixel if it's colored yet. Otherwise returns `Nothing`.
