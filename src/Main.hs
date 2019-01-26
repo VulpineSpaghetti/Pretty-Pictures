@@ -17,30 +17,30 @@ import System.Random
 import Graphics.Image hiding (Array, maximum)
 
 
--- TODO: Make starting locations configurable as an argument of makeArtAndSave
 main :: IO ()
 main = do
     let bounds = (600, 400)
         -- bounds = (1280, 720)
         -- bounds = (1920, 1080)
     
-    makeArtAndSave "Test Rounded Square" bounds TheMiddle roundedSquarePath pickClosestCT maxColor
+    makeArtAndSave "Circle" bounds TheMiddle [(0,0)] circularPath pickClosestCT maxColor
 
 
 makeArtAndSave
     :: String
     -> (Int, Int)
     -> StartingPos
+    -> [(Int, Int)]
     -> IndexPath [] (Int, Int)
     -> ColorPicker' ColorTree Color
     -> ColorCombinator [] Color
     -> IO ()
 
-makeArtAndSave fileName bounds startingPos indexPath colorPicker colorCombinator
+makeArtAndSave fileName bounds startingPos relativeSeedLocations indexPath colorPicker colorCombinator
     = do
     randomGenerator <- getStdGen
 
-    let art = makeArt bounds randomGenerator startingPos indexPath colorPicker colorCombinator
+    let art = makeArt bounds randomGenerator startingPos relativeSeedLocations indexPath colorPicker colorCombinator
         
         maxRed = maximum . fmap getRed $ art
         maxGreen = maximum . fmap getGreen $ art
@@ -63,25 +63,26 @@ makeArt
     => (Int, Int)
     -> gen
     -> StartingPos
+    -> [(Int, Int)]
     -> IndexPath [] (Int, Int)
     -> ColorPicker' ColorTree Color
     -> ColorCombinator [] Color
     -> Pixels
 
-makeArt (x,y) randomGenerator startingPos indexPath colorPicker colorCombinator
+makeArt (x,y) randomGenerator startingPos relativeSeedLocations indexPath colorPicker colorCombinator
     = makePicture bounds orderedIndices colors pixels colorPicker colorCombinator
     where
         bounds = ((0,0) , (x-1,y-1))
 
         indices = range bounds
         origin@(ox,oy) = getRelativePos startingPos (x,y)
-        startingLocations = fmap (bimap (+ox) (+oy)) [(0,0)] -- [(0,2) , (2,0) , ((-2),0) , (0,(-2))]
-        orderedIndices = indexPath origin indices \\ startingLocations
+        absoluteSeedLocations = fmap (bimap (+ox) (+oy)) relativeSeedLocations
+        orderedIndices = indexPath origin indices \\ absoluteSeedLocations
 
         allColors = makeAllColors (x,y)
-        (startingColors, colors) = pickStartingColors randomGenerator allColors (length startingLocations)
+        (startingColors, colors) = pickStartingColors randomGenerator allColors (length absoluteSeedLocations)
 
-        startingPixels = zip startingLocations startingColors
+        startingPixels = zip absoluteSeedLocations startingColors
 
         pixels = addColoredPixels startingPixels emptyScreen
 
