@@ -26,6 +26,7 @@ main = do
     makeArtAndSave "Circle" bounds TheMiddle [(0,0)] 2 circularPath pickClosestCT maxColor
 
 
+-- | Creates the picture and saves it into a PNG in an art/ folder.
 makeArtAndSave
     :: String
     -> (Int, Int)
@@ -58,7 +59,8 @@ makeArtAndSave fileName bounds pictureOrigin relativeSeedLocations searchDistanc
     putStrLn ("Finished " ++ fileName ++ "!")
 
 
-
+-- | Does few preliminary calculations (initializing few data structures and such) before giving
+-- control to `makePicture` to make the picture and then returns it.
 makeArt
     :: RandomGen gen
     => (Int, Int)
@@ -89,6 +91,7 @@ makeArt (x,y) randomGenerator pictureOrigin relativeSeedLocations searchDistance
         picture = addPixels startingPicture emptyPicture
 
 
+-- | Actually draws the picture
 makePicture
     :: ((Int,Int) , (Int,Int))
     -> Int
@@ -116,6 +119,7 @@ makePicture bounds searchDistance (index:indices) colors picture colorPicker col
         updatedPicture = addAPixel index pickedColor picture
 
 
+-- | Returns the colors surrounding the given pixel.
 getSurroundingColors
     :: ((Int,Int) , (Int,Int))
     -> Int
@@ -133,6 +137,7 @@ getSurroundingColors bounds searchDist picture (x,y)
         maybeColors = fmap (picture !) surroundingIndices
 
 
+-- | Tells you if the given pixel is within bounds of the picture.
 isInsidePicture
     :: ((Int,Int) , (Int,Int))
     -> (Int,Int)

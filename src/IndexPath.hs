@@ -27,7 +27,8 @@ import Data.Bifunctor
 
 -- | `IndexPath` is a function that gets the starting index and a container with indices
 -- and returns a new container with indices sorted in a particular order
-type IndexPath t a = (a -> t a -> t a)
+type IndexPath t a
+    = a -> t a -> t a
 
 
 -- | Does nothing

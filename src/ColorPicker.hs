@@ -14,10 +14,15 @@ import Linear.V3
 type ColorPicker t a
     = a -> t a -> (a, t a)
 
+-- | `ColorPicker'` is a bit of a hack version of `ColorPicker` for when `t` doesn't take any
+-- type arguments.
 type ColorPicker' t a
     = a -> t -> (a, t)
 
 
+-- | Picks the closest color to the provided one using a simple fold.
+-- 
+-- O(n)
 pickClosestFold :: (Ord n, Integral n) => ColorPicker [] (V3 n)
 {-# INLINE pickClosestFold #-}
 pickClosestFold targetColor colors
@@ -32,6 +37,9 @@ pickClosestFold targetColor colors
                 = oldColor
 
 
+-- | Picks the closest color to the provided one using the ColorTree.
+-- 
+-- O(log n)
 pickClosestCT :: ColorPicker' ColorTree Color
 {-# INLINE pickClosestCT #-}
 pickClosestCT
