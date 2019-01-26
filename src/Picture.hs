@@ -11,19 +11,19 @@ import Data.Map.Strict
 type Picture = Map (Int,Int) Color
 
 
-emptyScreen :: Picture
-emptyScreen = empty
+emptyPicture :: Picture
+emptyPicture = empty
 
 
-addColoredPixel :: (Int,Int) -> Color -> Picture -> Picture
-addColoredPixel = insert
+addAPixel :: (Int,Int) -> Color -> Picture -> Picture
+addAPixel = insert
 
 
-addColoredPicture :: [((Int,Int), Color)] -> Picture -> Picture
-addColoredPicture [] picture
+addPixels :: [((Int,Int), Color)] -> Picture -> Picture
+addPixels [] picture
     = picture
-addColoredPicture ((location, color) : list) picture
-    = addColoredPicture list $ addColoredPixel location color picture
+addPixels ((location, color) : list) picture
+    = addPixels list $ addAPixel location color picture
     
     
 (!) :: Picture -> (Int,Int) -> Maybe Color

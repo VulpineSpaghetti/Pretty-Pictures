@@ -86,7 +86,7 @@ makeArt (x,y) randomGenerator startingPos relativeSeedLocations searchDistance i
 
         startingPicture = zip absoluteSeedLocations startingColors
 
-        picture = addColoredPicture startingPicture emptyScreen
+        picture = addPixels startingPicture emptyPicture
 
 
 makePicture
@@ -113,7 +113,7 @@ makePicture bounds searchDistance (index:indices) colors picture colorPicker col
 
         (pickedColor, updatedColors) = colorPicker combinedSurrColors colors
 
-        updatedPicture = addColoredPixel index pickedColor picture
+        updatedPicture = addAPixel index pickedColor picture
 
 
 getSurroundingColors
