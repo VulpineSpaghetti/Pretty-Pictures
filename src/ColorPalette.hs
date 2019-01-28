@@ -1,6 +1,5 @@
 {-# Language  TypeSynonymInstances #-}
 {-# Language  FlexibleInstances #-}
-{-# Language  MultiParamTypeClasses #-}
 
 module ColorPalette where
 
