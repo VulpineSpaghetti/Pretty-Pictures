@@ -1,13 +1,14 @@
 {-# Language  TypeSynonymInstances #-}
 {-# Language  FlexibleInstances #-}
+{-# Language  MultiParamTypeClasses #-}
 
 module ColorPalette where
 
 import Color
+import KDTree
 
 import Data.Ix
 
-import Data.Trees.KdTree
 import Linear.V3
 import System.Random
 
@@ -20,31 +21,18 @@ type ColorPalette = KdTree Color
 instance Point Color where
     dimension _ = 3
     
-    coord 0 = fromIntegral . getRed
-    coord 1 = fromIntegral . getGreen
-    coord 2 = fromIntegral . getBlue
+    coord 0 = getRed
+    coord 1 = getGreen
+    coord 2 = getBlue
     
     dist2 (V3 a b c) (V3 x y z)
-        = fromIntegral $ (a - x)^2 + (b - y)^2 + (c - z)^2
+        = (a - x)^2 + (b - y)^2 + (c - z)^2
 
 
 -- | Removes color from the color palette 
 removeColor :: Color -> ColorPalette -> ColorPalette
 removeColor color colors
-    = remove' colors color
-
-
--- My edit of the internal `remove` function from KdTree. The one in the library has a major bug,
--- so I had to copy it over here and fix it.
-remove' :: (Eq p, Point p) => KdTree p -> p -> KdTree p
-remove' KdEmpty _ = KdEmpty
-remove' (KdNode l p r axis) pKill
-    | p == pKill
-        = fromListWithDepth (toList l ++ toList r) axis
-    | coord axis pKill  < coord axis p
-        = KdNode (remove' l pKill) p r axis
-    | otherwise
-        = KdNode l p (remove' r pKill) axis
+    = remove colors color
 
 
 -- | Returns the closest unused color in the color palette to the given one.

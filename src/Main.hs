@@ -23,7 +23,7 @@ main = do
         -- bounds = (1280, 720)
         -- bounds = (1920, 1080)
     
-    makeArtAndSave "Rounded square" bounds Center [(0,0)] 2 roundedSquarePath pickClosest brightestColor
+    makeArtAndSave "Rounded square" bounds Center [(0,0)] 2 roundedSquarePath pickClosest averageI
 
 
 -- | Creates the picture and saves it into a PNG in an art/ folder.

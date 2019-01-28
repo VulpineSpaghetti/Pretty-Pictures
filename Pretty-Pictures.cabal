@@ -2,7 +2,7 @@
 -- documentation, see http://haskell.org/cabal/users-guide/
 
 name:                Pretty-Pictures
-version:             0.3.0
+version:             0.4.0
 synopsis:            Programatic creation of pretty pictures
 -- description:         
 license:             MIT
@@ -17,9 +17,9 @@ cabal-version:       >=1.20
 
 executable Pretty-Pictures
   main-is:             Main.hs
-  other-modules:       IndexPath, PictureOrigin, ColorPicker, ColorCombinator, Color, ColorPalette, Picture
+  other-modules:       IndexPath, PictureOrigin, ColorPicker, ColorCombinator, Color, ColorPalette, Picture, KDTree
   -- other-extensions:    
-  build-depends:       base >=4.9 && <4.13, linear >=1.20 && <1.21, random >=1.1 && <1.2, array >=0.5 && <0.6, hip >=1.5 && <1.6, KdTree >=0.2 && <0.3, containers >=0.5 && <0.7
+  build-depends:       base >=4.9 && <4.13, linear >=1.20 && <1.21, random >=1.1 && <1.2, array >=0.5 && <0.6, hip >=1.5 && <1.6, containers >=0.5 && <0.7
   hs-source-dirs:      src
   default-language:    Haskell2010
   ghc-options:         -O2
