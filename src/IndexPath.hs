@@ -1,23 +1,4 @@
-module IndexPath
-(   IndexPath
-
-,   trivialPath
-,   mathPath
-
-,   diamondPath
-,   diamondPath2
-,   invertedDiamondPath
-,   circularPath
-,   roundedSquarePath
-,   axisPath
-,   wavesPath
-,   linePath
-,   saddleWavePath
-,   sinCosPath
-,   halfPlane
-
-,   squareSpiralPath
-) where
+module IndexPath where
 
 import Prelude hiding (Left,Right)
 
