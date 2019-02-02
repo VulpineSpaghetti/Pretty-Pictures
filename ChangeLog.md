@@ -27,3 +27,4 @@
 
  * Renamed IndexPath to PictureShape and made large changes to it
  * Also changed the internal order of pixels so y comes before x (change made because the library expects x and y reversed and it was easier to do the same)
+ * Moved the PictureShape argument to be last in `makeArtAndSave` so the PictureShape can be more given to the function if it's complex
