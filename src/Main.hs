@@ -4,9 +4,9 @@ import Color
 import ColorCombinator
 import ColorPalette
 import ColorPicker
-import IndexPath
 import Picture
 import PictureOrigin
+import PictureShape
 
 import Data.Bifunctor
 import Data.Ix
@@ -23,7 +23,7 @@ main = do
         -- bounds = (1280, 720)
         -- bounds = (1920, 1080)
     
-    makeArtAndSave "Rounded square" bounds Center [(0,0)] 2 roundedSquarePath pickClosest averageI
+    makeArtAndSave "Test" bounds Center [(0,0)] 2 pickClosest brightestColor . useShape $ diamond 1 5
 
 
 -- | Creates the picture and saves it into a PNG in an art/ folder.
@@ -33,16 +33,16 @@ makeArtAndSave
     -> PictureOrigin
     -> [(Int, Int)]
     -> Int
-    -> IndexPath [] (Int, Int)
     -> ColorPicker' ColorPalette Color
     -> ColorCombinator [] Color
+    -> PictureShape [] (Int, Int)
     -> IO ()
 
-makeArtAndSave fileName bounds pictureOrigin relativeSeedLocations searchDistance indexPath colorPicker colorCombinator
+makeArtAndSave fileName (maxX,maxY) pictureOrigin relativeSeedLocations searchDistance colorPicker colorCombinator pictureShape
     = do
     randomGenerator <- getStdGen
 
-    let art = makeArt bounds randomGenerator pictureOrigin relativeSeedLocations searchDistance indexPath colorPicker colorCombinator
+    let art = makeArt (maxY, maxX) randomGenerator pictureOrigin relativeSeedLocations searchDistance colorPicker colorCombinator pictureShape
         
         maxRed = maximum . fmap getRed $ art
         maxGreen = maximum . fmap getGreen $ art
@@ -53,9 +53,9 @@ makeArtAndSave fileName bounds pictureOrigin relativeSeedLocations searchDistanc
         invertCoords (x,y) = (y,x)
         
         -- Converts the picture into an image from the Graphics.Image library
-        image = makeImage (invertCoords bounds) (toDoublePixel maxColor . (art !?) . invertCoords) :: Image VS RGB Double
+        image = makeImage (maxY, maxX) (toDoublePixel maxColor . (art !?) . (\(y,x) -> (maxY - y - 1, x))) :: Image VS RGB Double
 
-    writeImageExact PNG [] ("art/" ++ fileName ++ ".png") image
+    writeImageExact PNG [] ("Art/" ++ fileName ++ ".png") image
 
     putStrLn ("Finished " ++ fileName ++ "!")
 
@@ -69,12 +69,12 @@ makeArt
     -> PictureOrigin
     -> [(Int, Int)]
     -> Int
-    -> IndexPath [] (Int, Int)
     -> ColorPicker' ColorPalette Color
     -> ColorCombinator [] Color
+    -> PictureShape [] (Int, Int)
     -> Picture
 
-makeArt (x,y) randomGenerator pictureOrigin relativeSeedLocations searchDistance indexPath colorPicker colorCombinator
+makeArt (x,y) randomGenerator pictureOrigin relativeSeedLocations searchDistance colorPicker colorCombinator pictureShape
     = makePicture bounds searchDistance orderedIndices colors picture colorPicker colorCombinator
     where
         bounds = ((0,0) , (x-1,y-1))
@@ -82,7 +82,7 @@ makeArt (x,y) randomGenerator pictureOrigin relativeSeedLocations searchDistance
         indices = range bounds
         origin@(oX,oY) = getAbsolutePos pictureOrigin (x,y)
         absoluteSeedLocations = fmap (bimap (+oX) (+oY)) relativeSeedLocations
-        orderedIndices = indexPath origin indices \\ absoluteSeedLocations
+        orderedIndices = pictureShape origin indices \\ absoluteSeedLocations
 
         allColors = makeAllColors (x,y)
         (startingColors, colors) = pickStartingColors randomGenerator allColors (length absoluteSeedLocations)
