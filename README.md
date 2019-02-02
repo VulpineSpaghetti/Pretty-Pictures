@@ -5,11 +5,13 @@
 A small program that generates interesting images using a simple reduce/fold.
 
 It allows you to make pictures such as: 
-![squary water colors](https://i.imgur.com/wiSVUsk.jpg) 
-(generated using `makeArtAndSave "Rounded square" (1280, 720) Center [(0,0)] 2 roundedSquarePath pickClosest brightestColor`)
-or 
 ![circly water colors](https://i.imgur.com/OwLaGsU.jpg) 
-(generated using `makeArtAndSave "Circle" (1280, 720) BottomLeft [(0,0)] 2 circularPath pickClosest brightestColor`)
+(generated using `makeArtAndSave "Circle" (1280, 720) BottomLeft [(0,0)] 2 pickClosest brightestColor (useShape circle)`)
+
+or
+
+![Pyramid](https://i.imgur.com/KUTTaUz.jpg)
+(generated using `makeArtAndSave "Pyramid" (1920, 1080) Center [(0,0)] 2 pickClosest brightestColor . useShape . pickShapeIfYIsNegative (ellipse 5 1) $ afterN 300 (diamond 1 1) (moveShape 400 500 circle)`
 
 ## Installation instructions
 
